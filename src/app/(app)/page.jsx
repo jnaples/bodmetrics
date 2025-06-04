@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -26,12 +27,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import WeightInput from "@/components/ui/weight-input";
 import CheckinForm from "@/components/ui/checkin-form";
-import { useState } from "react";
+import { BodyWeightLineGraph } from "@/components/body-weight-line-graph";
 
 export default function Home() {
   const [checkIns, setCheckins] = useState([]);
+  const [averageWeight, setAverageWeight] = useState("");
 
-  const addCheckin = () => {
+  const addCheckinCard = () => {
     setCheckins((prev) => [...prev, prev.length]);
   };
 
@@ -40,8 +42,12 @@ export default function Home() {
       <div className="mx-auto w-full p-4 pb-20 lg:max-w-7xl lg:pt-10">
         <PageHeader title="Dashboard" />
         <div className="flex flex-col items-start gap-4">
+          <p>{averageWeight} lbs</p>
           <div className="grid w-full auto-rows-min gap-4 md:grid-cols-4">
-            <LineGraph title="Body weight" />
+            <BodyWeightLineGraph
+              title="Body weight"
+              averageWeight={averageWeight}
+            />
             <LineGraph title="Waist measurement" />
             <LineGraph title="Body fat %" />
             <LineGraph title="Steps walked" />
@@ -50,12 +56,16 @@ export default function Home() {
 
           <div className="flex w-full flex-col gap-10">
             {checkIns.map((checkinID) => (
-              <CheckinForm key={checkinID} />
+              <CheckinForm
+                key={checkinID}
+                averageWeight={averageWeight}
+                setAverageWeight={setAverageWeight}
+              />
             ))}
           </div>
           <Button
             className="w-full font-bold uppercase lg:w-fit"
-            onClick={addCheckin}
+            onClick={addCheckinCard}
           >
             Add new week
           </Button>
