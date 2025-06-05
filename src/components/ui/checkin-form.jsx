@@ -1,11 +1,8 @@
 "use client";
-
 import { useState } from "react";
 import { Card } from "./card";
 import { Input } from "./input";
 import { Label } from "./label";
-import { Textarea } from "./textarea";
-import WeightInput from "./weight-input";
 
 export default function CheckinForm({
   index,
@@ -14,13 +11,6 @@ export default function CheckinForm({
 }) {
   // Keep local state for 7 weigh-ins
   const [weighIns, setWeighIns] = useState(["", "", "", "", "", "", ""]);
-
-  // Other form fields can be controlled similarly or left uncontrolled for now
-  const [calorieGoal, setCalorieGoal] = useState("");
-  const [bodyFatCaliper, setBodyFatCaliper] = useState("");
-  const [bodyFatPercent, setBodyFatPercent] = useState("");
-  const [waistMeasurement, setWaistMeasurement] = useState("");
-  const [notes, setNotes] = useState("");
 
   function handleWeighInChange(index, value) {
     const newWeighIns = [...weighIns];
@@ -55,55 +45,12 @@ export default function CheckinForm({
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-7">
-          <div className="col-span-7 lg:col-span-1">
-            <Label>Daily calorie goal</Label>
-            <Input
-              type="number"
-              value={calorieGoal}
-              onChange={(e) => setCalorieGoal(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-7">
-          <div className="col-span-7 lg:col-span-1">
-            <Label>Body fat caliper</Label>
-            <Input
-              type="number"
-              value={bodyFatCaliper}
-              onChange={(e) => setBodyFatCaliper(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-7">
-          <div className="col-span-7 lg:col-span-1">
-            <Label>Body fat %</Label>
-            <Input
-              type="number"
-              value={bodyFatPercent}
-              onChange={(e) => setBodyFatPercent(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="grid grid-cols-7">
-          <div className="col-span-7 lg:col-span-1">
-            <Label>Waist measurement</Label>
-            <Input
-              type="number"
-              value={waistMeasurement}
-              onChange={(e) => setWaistMeasurement(e.target.value)}
-            />
-          </div>
-        </div>
+
         <div className="grid grid-cols-7">
           <div className="col-span-7 lg:col-span-1">
             <Label>Average weight</Label>
             <Input value={averageWeight} readOnly />
           </div>
-        </div>
-        <div>
-          <Label>Notes</Label>
-          <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
         </div>
       </form>
     </Card>

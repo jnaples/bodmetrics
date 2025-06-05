@@ -1,30 +1,9 @@
 "use client";
 
-import { use, useState } from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/ui/mode-toggle";
 import { LineGraph } from "@/components/ui/line-graph";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { StatCard } from "@/components/ui/stat-card";
 import PageHeader from "@/components/ui/page-header";
-
-import TopNavBar from "@/components/ui/top-navbar";
-
-import WeightInput from "@/components/ui/weight-input";
 import CheckinForm from "@/components/ui/checkin-form";
 import { BodyWeightLineGraph } from "@/components/body-weight-line-graph";
 
