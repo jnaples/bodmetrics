@@ -7,7 +7,11 @@ import { Label } from "./label";
 import { Textarea } from "./textarea";
 import WeightInput from "./weight-input";
 
-export default function CheckinForm({ averageWeight, setAverageWeight }) {
+export default function CheckinForm({
+  index,
+  averageWeight,
+  setAverageWeightAtIndex,
+}) {
   // Keep local state for 7 weigh-ins
   const [weighIns, setWeighIns] = useState(["", "", "", "", "", "", ""]);
 
@@ -29,10 +33,10 @@ export default function CheckinForm({ averageWeight, setAverageWeight }) {
       .filter((n) => !isNaN(n));
 
     if (weighInArray.length === 0) {
-      setAverageWeight("");
+      setAverageWeightAtIndex("");
     } else {
       const avg = weighInArray.reduce((a, b) => a + b, 0) / weighInArray.length;
-      setAverageWeight(avg.toFixed(1));
+      setAverageWeightAtIndex(avg.toFixed(1));
     }
   }
 
