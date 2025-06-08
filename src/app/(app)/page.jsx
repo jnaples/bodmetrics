@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { startOfWeek, addDays, format, parse } from "date-fns";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LineGraph } from "@/components/ui/line-graph";
-import PageHeader from "@/components/ui/page-header";
 import CheckinForm from "@/components/ui/checkin-form";
 import { BodyWeightLineGraph } from "@/components/body-weight-line-graph";
 
@@ -11,14 +11,35 @@ export default function Home() {
   const [checkIns, setCheckIns] = useState([]);
 
   function addCheckinCard() {
-    setCheckIns((prev) => [
-      ...prev,
-      {
-        weighIns: ["", "", "", "", "", "", ""],
-        averageWeight: "",
-        startDate: "",
-      },
-    ]);
+    setCheckIns((prev) => {
+      let newStartDate;
+
+      if (prev.length === 0 || !prev.at(-1)?.startDate) {
+        const weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
+        newStartDate = format(weekStart, "M/d/yyyy");
+      } else {
+        const lastStartDate = prev.at(-1).startDate;
+        const parsedDate = parse(lastStartDate, "M/d/yyyy", new Date());
+        const nextWeekStart = addDays(parsedDate, 7);
+        newStartDate = format(nextWeekStart, "M/d/yyyy");
+      }
+
+      // Generate full week of formatted dates
+      const parsedStart = parse(newStartDate, "M/d/yyyy", new Date());
+      const weekDates = Array.from({ length: 7 }, (_, i) =>
+        format(addDays(parsedStart, i), "M/d"),
+      );
+
+      return [
+        ...prev,
+        {
+          weighIns: ["", "", "", "", "", "", ""],
+          averageWeight: "",
+          startDate: newStartDate,
+          dates: weekDates, // ✅ send all week dates
+        },
+      ];
+    });
   }
 
   function updateCheckInAtIndex(index, updateData) {
@@ -30,10 +51,6 @@ export default function Home() {
       return newCheckIns;
     });
   }
-
-  useEffect(() => {
-    console.log("checkIns state changed:", checkIns[0]);
-  }, [checkIns]);
 
   return (
     <>

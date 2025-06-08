@@ -1,5 +1,5 @@
 "use client";
-import { format, addDays, startOfWeek } from "date-fns";
+import { format, addDays, parse, isValid } from "date-fns";
 
 import { useState } from "react";
 import { Card } from "./card";
@@ -7,12 +7,7 @@ import { Input } from "./input";
 import { Label } from "./label";
 
 export default function CheckinForm({ index, data, onUpdate }) {
-  // const dates = ["5/1", "5/2", "5/3", "5/4", "5/5", "5/6", "5/7"];
-
-  const weekStart = startOfWeek(new Date(), { weekStartsOn: 0 }); // Monday
-  const dates = Array.from({ length: 7 }, (_, i) =>
-    format(addDays(weekStart, i), "M/d"),
-  );
+  const dates = data.dates; // ✅ coming from parent
 
   function handleWeighInChange(i, value) {
     const newWeighIns = [...data.weighIns];
@@ -30,7 +25,7 @@ export default function CheckinForm({ index, data, onUpdate }) {
     onUpdate(index, {
       weighIns: newWeighIns,
       averageWeight: avg,
-      startDate: dates[0],
+      // ✅ don't touch startDate or dates
     });
   }
 
@@ -40,7 +35,7 @@ export default function CheckinForm({ index, data, onUpdate }) {
         <div className="flex flex-col gap-4 lg:flex-row">
           {dates.map((date, i) => (
             <div key={i}>
-              <Label htmlFor="email">{date}/2025</Label>
+              <Label>{date}/2025</Label>
               <Input
                 type="number"
                 value={data.weighIns[i]}
