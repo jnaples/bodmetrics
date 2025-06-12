@@ -1,5 +1,6 @@
 "use client";
 
+import { format, parseISO } from "date-fns";
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
@@ -19,17 +20,18 @@ import {
 } from "@/components/ui/chart";
 
 const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
+  { date: "2025-06-01", average: 165.3 },
+  { date: "2025-06-08", average: 160 },
+  { date: "2025-06-15", average: 159.9 },
+  { date: "2025-06-22", average: 161 },
+  { date: "2025-06-29", average: 160.3 },
+  { date: "2025-07-06", average: 158.2 },
+  { date: "2025-07-13", average: 157.2 },
 ];
 
 const chartConfig = {
   desktop: {
-    label: "Average weight",
+    label: "Average",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
@@ -37,9 +39,11 @@ const chartConfig = {
 export function BodyWeightLineGraph({
   title,
   description,
+  weightData,
 }: {
   title: string;
   description?: string;
+  weightData: { x: string; y: number }[];
 }) {
   return (
     <Card>
@@ -59,18 +63,19 @@ export function BodyWeightLineGraph({
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="date"
+              interval={1}
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => format(parseISO(value), "M/d")}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dot" hideLabel />}
             />
             <Area
-              dataKey="desktop"
+              dataKey="average"
               type="linear"
               fill="var(--color-desktop)"
               fillOpacity={0.4}
