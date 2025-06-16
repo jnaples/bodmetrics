@@ -47,7 +47,7 @@ export function BodyWeightLineGraph({
 }) {
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
@@ -55,7 +55,7 @@ export function BodyWeightLineGraph({
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={weightData}
             margin={{
               left: 12,
               right: 12,
@@ -64,7 +64,7 @@ export function BodyWeightLineGraph({
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
-              interval={1}
+              interval={0}
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -76,6 +76,7 @@ export function BodyWeightLineGraph({
             />
             <Area
               dataKey="average"
+              name="Weight"
               type="linear"
               fill="var(--color-desktop)"
               fillOpacity={0.4}

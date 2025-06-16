@@ -7,19 +7,17 @@ import { LineGraph } from "@/components/ui/line-graph";
 import CheckinForm from "@/components/ui/checkin-form";
 import { BodyWeightLineGraph } from "@/components/ui/body-weight-line-graph";
 import { useConvertToMonths } from "@/hooks/useConverToMonths";
-
-const chartData = [
-  { date: "2025-06-01", average: 165.3 },
-  { date: "2025-06-08", average: 160 },
-  { date: "2025-06-15", average: 159.9 },
-  { date: "2025-06-22", average: 161 },
-  { date: "2025-06-29", average: 160.3 },
-  { date: "2025-07-06", average: 158.2 },
-  { date: "2025-07-13", average: 157.2 },
-];
+import PageHeader from "@/components/ui/page-header";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Home() {
-  const { rolledUpData, view, setView } = useConvertToMonths(chartData);
+  // const { rolledUpData, view, setView } = useConvertToMonths(chartData);
 
   const [checkIns, setCheckIns] = useState([]);
 
@@ -79,7 +77,8 @@ export default function Home() {
     <>
       <div className="relative mx-auto flex max-h-screen w-full flex-col gap-6 p-6 pb-20 lg:max-w-7xl">
         <div className="sticky top-0">
-          <p>{checkIns.at(-1)?.averageWeight || "—"} lbs</p>
+          <PageHeader title="Body tracking" />
+
           <div className="sticky grid w-full auto-rows-min gap-4 md:grid-cols-4">
             <BodyWeightLineGraph title="Body weight" weightData={weightData} />
             <LineGraph title="Waist measurement" />

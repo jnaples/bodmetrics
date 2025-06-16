@@ -12,6 +12,16 @@ export default function PageHeader({ title }: { title: string }) {
       <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
       <div className="flex items-center space-x-2">
         <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select time period" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="monthly">Monthly</SelectItem>
+            <SelectItem value="yearly">Yearly</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select>
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Fit phase" />
           </SelectTrigger>
