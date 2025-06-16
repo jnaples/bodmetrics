@@ -21,6 +21,14 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(app)/page.jsx", "src/components/ui/checkin-form.jsx", "src/components/body-weight-line-graph.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/(app)/page.jsx",
+    "src/components/ui/checkin-form.jsx",
+    "src/components/ui/body-weight-line-graph.tsx"
+  ],
   "exclude": ["node_modules"]
 }

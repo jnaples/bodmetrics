@@ -5,9 +5,22 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LineGraph } from "@/components/ui/line-graph";
 import CheckinForm from "@/components/ui/checkin-form";
-import { BodyWeightLineGraph } from "@/components/body-weight-line-graph";
+import { BodyWeightLineGraph } from "@/components/ui/body-weight-line-graph";
+import { useConvertToMonths } from "@/hooks/useConverToMonths";
+
+const chartData = [
+  { date: "2025-06-01", average: 165.3 },
+  { date: "2025-06-08", average: 160 },
+  { date: "2025-06-15", average: 159.9 },
+  { date: "2025-06-22", average: 161 },
+  { date: "2025-06-29", average: 160.3 },
+  { date: "2025-07-06", average: 158.2 },
+  { date: "2025-07-13", average: 157.2 },
+];
 
 export default function Home() {
+  const { rolledUpData, view, setView } = useConvertToMonths(chartData);
+
   const [checkIns, setCheckIns] = useState([]);
 
   function addCheckinCard() {
@@ -61,11 +74,6 @@ export default function Home() {
       date: entry.startDate,
       average: parseFloat(entry.averageWeight),
     }));
-
-  useEffect(() => {
-    console.log(checkIns);
-    console.log("weightData", weightData);
-  }, [weightData]);
 
   return (
     <>
