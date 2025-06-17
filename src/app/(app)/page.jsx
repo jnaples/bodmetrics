@@ -1,11 +1,12 @@
 "use client";
 
 import { startOfWeek, addDays, format, parse } from "date-fns";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Button } from "@/components/ui/button";
-import { LineGraph } from "@/components/ui/line-graph";
 import CheckinForm from "@/components/ui/checkin-form";
 import { BodyWeightLineGraph } from "@/components/ui/body-weight-line-graph";
+import { WaistMeasurementLineGraph } from "@/components/ui/waist-measurement-line-graph";
+import { BodyFatLineGraph } from "@/components/ui/body-fat-line-graph";
 import { useConvertToMonths } from "@/hooks/useConverToMonths";
 import PageHeader from "@/components/ui/page-header";
 import {
@@ -17,9 +18,55 @@ import {
 } from "@/components/ui/select";
 
 export default function Home() {
-  // const { rolledUpData, view, setView } = useConvertToMonths(chartData);
-
   const [checkIns, setCheckIns] = useState([]);
+
+  const weightData = checkIns
+    .filter((entry) => entry.averageWeight && entry.startDate)
+    .map((entry) => ({
+      date: entry.startDate,
+      average: parseFloat(entry.averageWeight),
+      waist: entry.waistMeasurement ? parseFloat(entry.waistMeasurement) : null,
+      bodyFat: entry.bodyFatPercentage
+        ? parseFloat(entry.bodyFatPercentage)
+        : null,
+    }));
+
+  const waistData = checkIns
+    .filter((entry) => entry.waistMeasurement && entry.startDate)
+    .map((entry) => ({
+      date: entry.startDate,
+      waist: parseFloat(entry.waistMeasurement),
+    }));
+
+  const bodyFatData = checkIns
+    .filter((entry) => entry.bodyFatPercentage && entry.startDate)
+    .map((entry) => ({
+      date: entry.startDate,
+      bodyFat: parseFloat(entry.bodyFatPercentage),
+    }));
+
+  // Log the weight data to see average weights week over week
+  console.log(
+    "Complete weekly data:",
+    checkIns.map((week, index) => ({
+      weekNumber: index + 1,
+      ...week,
+    })),
+  );
+
+  const {
+    rolledUpData: rolledUpWeightData,
+    view,
+    setView,
+  } = useConvertToMonths(weightData);
+  const { rolledUpData: rolledUpWaistData } = useConvertToMonths(
+    waistData,
+    view,
+  );
+  const { rolledUpData: rolledUpBodyFatData } = useConvertToMonths(
+    bodyFatData,
+    view,
+  );
 
   function addCheckinCard() {
     setCheckIns((prev) => {
@@ -66,27 +113,54 @@ export default function Home() {
     });
   }
 
-  const weightData = checkIns
-    .filter((entry) => entry.averageWeight && entry.startDate)
-    .map((entry) => ({
-      date: entry.startDate,
-      average: parseFloat(entry.averageWeight),
-    }));
-
   return (
     <>
       <div className="relative mx-auto flex max-h-screen w-full flex-col gap-6 p-6 pb-20 lg:max-w-7xl">
         <div className="sticky top-0">
-          <PageHeader title="Body tracking" />
+          <div className="mb-4 flex items-center justify-between">
+            <PageHeader title="Body tracking" />
+            <div className="flex items-center space-x-2">
+              <Select>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Fit phase" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="option1">Weight loss</SelectItem>
+                  <SelectItem value="option2">Weight gain</SelectItem>
+                  <SelectItem value="option3">Maintenance</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={view} onValueChange={setView}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select time period" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                  <SelectItem value="yearly">Yearly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-          <div className="sticky grid w-full auto-rows-min gap-4 md:grid-cols-4">
-            <BodyWeightLineGraph title="Body weight" weightData={weightData} />
-            <LineGraph title="Waist measurement" />
-            <LineGraph title="Body fat %" />
-            <LineGraph title="Steps walked" />
+          <div className="sticky grid w-full auto-rows-min gap-4 md:grid-cols-3">
+            <BodyWeightLineGraph
+              title="Body weight"
+              weightData={rolledUpWeightData}
+            />
+            <WaistMeasurementLineGraph
+              title="Waist measurement"
+              waistData={rolledUpWaistData}
+            />
+            <BodyFatLineGraph
+              title="Body fat %"
+              bodyFatData={rolledUpBodyFatData}
+            />
           </div>
         </div>
-        <h2 className="text-xl font-bold">Body tracking</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold">Body tracking</h2>
+        </div>
         {checkIns.length > 0 && (
           <div className="flex w-full flex-col gap-6 overflow-scroll">
             {checkIns.map((checkIn, index) => (

@@ -1,8 +1,11 @@
 import { useMemo, useState } from "react";
 import { format, parseISO } from "date-fns";
 
-export function useConvertToMonths(data) {
-  const [view, setView] = useState("weekly"); // weekly, monthly, yearly
+export function useConvertToMonths(data, externalView = null) {
+  const [internalView, setInternalView] = useState("weekly"); // weekly, monthly, yearly
+
+  const view = externalView !== null ? externalView : internalView;
+  const setView = externalView !== null ? () => {} : setInternalView;
 
   const rolledUpData = useMemo(() => {
     if (!data?.length) return [];
@@ -27,7 +30,7 @@ export function useConvertToMonths(data) {
         };
       }
 
-      acc[key].averageSum += entry.average;
+      acc[key].averageSum += entry.average || entry.waist || entry.bodyFat || 0;
       acc[key].count += 1;
 
       return acc;
@@ -36,6 +39,8 @@ export function useConvertToMonths(data) {
     return Object.values(grouped).map(({ date, averageSum, count }) => ({
       date,
       average: parseFloat((averageSum / count).toFixed(1)),
+      waist: parseFloat((averageSum / count).toFixed(1)),
+      bodyFat: parseFloat((averageSum / count).toFixed(1)),
     }));
   }, [data, view]);
 

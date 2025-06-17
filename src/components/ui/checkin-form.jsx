@@ -27,6 +27,20 @@ export default function CheckinForm({ index, data, onUpdate }) {
     });
   }
 
+  function handleWaistChange(value) {
+    onUpdate(index, {
+      waistMeasurement: value,
+      // ✅ don't touch other fields
+    });
+  }
+
+  function handleBodyFatChange(value) {
+    onUpdate(index, {
+      bodyFatPercentage: value,
+      // ✅ don't touch other fields
+    });
+  }
+
   return (
     <Card className="w-full p-6">
       <form className="flex flex-col gap-3 lg:flex-col">
@@ -43,10 +57,27 @@ export default function CheckinForm({ index, data, onUpdate }) {
           ))}
         </div>
 
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-7 gap-4">
           <div className="col-span-7 lg:col-span-1">
             <Label>Average weight</Label>
             <Input value={data.averageWeight} readOnly />
+          </div>
+          <div className="col-span-7 lg:col-span-1">
+            <Label>Waist measurement</Label>
+            <Input
+              type="number"
+              value={data.waistMeasurement || ""}
+              onChange={(e) => handleWaistChange(e.target.value)}
+            />
+          </div>
+          <div className="col-span-7 lg:col-span-1">
+            <Label>Body fat %</Label>
+            <Input
+              type="number"
+              step="0.1"
+              value={data.bodyFatPercentage || ""}
+              onChange={(e) => handleBodyFatChange(e.target.value)}
+            />
           </div>
         </div>
       </form>
