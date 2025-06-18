@@ -159,7 +159,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">Body tracking</h2>
+          <h2 className="text-xl font-bold">Daily check-ins</h2>
         </div>
         {checkIns.length > 0 && (
           <div className="flex w-full flex-col gap-6 overflow-scroll">
