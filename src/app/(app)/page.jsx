@@ -1,7 +1,7 @@
 "use client";
 
 import { startOfWeek, addDays, format, parse } from "date-fns";
-import {  useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import CheckinForm from "@/components/ui/checkin-form";
 import { BodyWeightLineGraph } from "@/components/ui/body-weight-line-graph";

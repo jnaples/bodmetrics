@@ -36,6 +36,43 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+// Utility function to calculate date range
+function getDateRange(data: { date: string; average: number }[]) {
+  if (!data || data.length === 0) {
+    return "No data available";
+  }
+
+  try {
+    const dates = data
+      .filter((item) => item && item.date) // Filter out any undefined or null items
+      .map((item) => parseISO(item.date))
+      .filter((date) => !isNaN(date.getTime())) // Filter out invalid dates
+      .sort((a, b) => a.getTime() - b.getTime());
+
+    if (dates.length === 0) {
+      return "No valid data available";
+    }
+
+    const startDate = dates[0];
+    const endDate = dates[dates.length - 1];
+
+    const startFormatted = format(startDate, "MMMM");
+    const endFormatted = format(endDate, "MMMM yyyy");
+
+    if (startDate.getFullYear() === endDate.getFullYear()) {
+      if (startDate.getMonth() === endDate.getMonth()) {
+        return `${startFormatted} ${startDate.getFullYear()}`;
+      }
+      return `${startFormatted} - ${endFormatted}`;
+    }
+
+    return `${startFormatted} ${startDate.getFullYear()} - ${endFormatted}`;
+  } catch (error) {
+    console.error("Error calculating date range:", error);
+    return "Date range unavailable";
+  }
+}
+
 export function BodyWeightLineGraph({
   title,
   description,
@@ -43,8 +80,10 @@ export function BodyWeightLineGraph({
 }: {
   title: string;
   description?: string;
-  weightData: { x: string; y: number }[];
+  weightData: { date: string; average: number }[];
 }) {
+  const dateRange = getDateRange(weightData);
+
   return (
     <Card>
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
@@ -92,7 +131,7 @@ export function BodyWeightLineGraph({
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              {dateRange}
             </div>
           </div>
         </div>

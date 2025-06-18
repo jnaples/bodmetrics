@@ -3,6 +3,7 @@
 import { Card } from "./card";
 import { Input } from "./input";
 import { Label } from "./label";
+import { format, parseISO } from "date-fns";
 
 export default function CheckinForm({ index, data, onUpdate }) {
   const dates = data.dates; // ✅ coming from parent
@@ -47,7 +48,7 @@ export default function CheckinForm({ index, data, onUpdate }) {
         <div className="flex flex-col gap-4 lg:flex-row">
           {dates.map((date, i) => (
             <div key={i}>
-              <Label>{date}/2025</Label>
+              <Label>{format(parseISO(date), "M/d")}</Label>
               <Input
                 type="number"
                 value={data.weighIns[i]}
